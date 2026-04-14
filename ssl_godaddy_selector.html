@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selector SSL · GoDaddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:      #0d0f12;
+      --bg-surface:   #141720;
+      --bg-card:      #1a1e28;
+      --bg-hover:     #1f2432;
+      --border:       rgba(255,255,255,0.07);
+      --border-hi:    rgba(255,255,255,0.14);
+      --accent:       #00d46a;
+      --accent-dim:   rgba(0, 212, 106, 0.12);
+      --accent-glow:  rgba(0, 212, 106, 0.25);
+      --text-primary: #e8eaf0;
+      --text-secondary:#8892a4;
+      --text-muted:   #4e5769;
+      --font-display: 'Syne', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+      --radius-sm:    8px;
+      --radius-md:    12px;
+      --radius-lg:    16px;
+      --radius-xl:    20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND GRID ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,106,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,106,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0,212,106,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.25rem 4rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-pill {
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .logo-sep {
+      width: 1px;
+      height: 16px;
+      background: var(--border-hi);
+    }
+
+    .logo-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    header h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 440px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-wrap {
+      margin-bottom: 2rem;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+
+    .progress-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 8px;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .p-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: all 0.25s;
+    }
+
+    .p-step.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .p-step.done {
+      color: var(--accent);
+    }
+
+    .p-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      transition: all 0.25s;
+    }
+
+    .p-step.active .p-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    .p-step.done .p-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    .p-line {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .p-line.done {
+      background: var(--accent);
+    }
+
+    /* ── QUESTION CARD ── */
+    .quiz-wrap {
+      animation: fadeUp 0.4s 0.15s ease both;
+    }
+
+    .q-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .q-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    }
+
+    .q-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+
+    .q-text {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .q-hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+      font-weight: 400;
+    }
+
+    /* ── OPTIONS ── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: var(--font-display);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+    }
+
+    .opt-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-hi);
+      transform: translateY(-1px);
+    }
+
+    .opt-btn.selected {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .opt-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-hi);
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opt-btn.selected .opt-radio {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .opt-radio::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #000;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .opt-btn.selected .opt-radio::after {
+      opacity: 1;
+    }
+
+    .opt-body {}
+
+    .opt-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .opt-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .opt-btn.selected .opt-title {
+      color: var(--accent);
+    }
+
+    /* ── NAV ── */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 20px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-back:hover {
+      border-color: var(--border-hi);
+      color: var(--text-primary);
+    }
+
+    .btn-next {
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 28px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: #000;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+      margin-left: auto;
+    }
+
+    .btn-next:hover {
+      background: #00f07a;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--accent-glow);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.3;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── RESULT ── */
+    .result-wrap {
+      animation: fadeUp 0.45s ease both;
+    }
+
+    .rec-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,212,106,0.3);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      padding: 5px 14px;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.25rem;
+    }
+
+    .rec-tag::before {
+      content: '✦';
+      font-size: 9px;
+    }
+
+    .result-main {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-main::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .result-glow {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .result-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .result-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .price-amount {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -1px;
+      font-family: var(--font-mono);
+    }
+
+    .price-period {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .price-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .why-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .why-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .why-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      font-weight: 400;
+    }
+
+    .features {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .features-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .feat-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .feat-row:last-child { border-bottom: none; }
+
+    .feat-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,212,106,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feat-check svg {
+      width: 9px;
+      height: 9px;
+    }
+
+    .feat-body {}
+
+    .feat-text {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .feat-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-cta {
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px 28px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: #000;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-cta:hover {
+      background: #00f07a;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--accent-glow);
+    }
+
+    .btn-restart {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 22px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-restart:hover {
+      border-color: var(--border-hi);
+      color: var(--text-primary);
+    }
+
+    /* ── COMPARE SECTION ── */
+    .compare-section {
+      margin-top: 0.5rem;
+    }
+
+    .compare-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding: 0 0.25rem;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 8px;
+    }
+
+    .cmp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      transition: all 0.15s;
+    }
+
+    .cmp-card:hover {
+      border-color: var(--border-hi);
+      background: var(--bg-hover);
+    }
+
+    .cmp-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .cmp-price {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .cmp-price span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .cmp-ideal {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HIDE/SHOW ── */
+    .hidden { display: none !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .page { padding: 2rem 1rem 3rem; }
+      .q-card { padding: 1.5rem; }
+      .result-main { padding: 1.5rem; }
+      .price-amount { font-size: 28px; }
+      header h1 { font-size: 24px; }
+      .p-step span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo-row">
+        <span class="logo-pill">GoDaddy</span>
+        <div class="logo-sep"></div>
+        <span class="logo-label">SSL · SELECTOR</span>
+      </div>
+      <h1>Encuentra tu <em>SSL ideal</em><br>en segundos</h1>
+      <p>4 preguntas. Recomendación personalizada. Sin complicaciones.</p>
+    </header>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-track">
+        <div class="p-step active" id="dot-1">
+          <div class="p-dot" id="pdot-1">1</div>
+          <span>Dominios</span>
+        </div>
+        <div class="p-line" id="line-1"></div>
+        <div class="p-step" id="dot-2">
+          <div class="p-dot" id="pdot-2">2</div>
+          <span>Tipo de sitio</span>
+        </div>
+        <div class="p-line" id="line-2"></div>
+        <div class="p-step" id="dot-3">
+          <div class="p-dot" id="pdot-3">3</div>
+          <span>Gestión</span>
+        </div>
+        <div class="p-line" id="line-3"></div>
+        <div class="p-step" id="dot-4">
+          <div class="p-dot" id="pdot-4">4</div>
+          <span>Validación</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="quiz-wrap" id="quiz-wrap">
+      <div class="q-card">
+        <div class="q-num" id="q-num">PREGUNTA 01 / 04</div>
+        <div class="q-text" id="q-text"></div>
+        <div class="q-hint" id="q-hint"></div>
+        <div class="options" id="q-options"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back hidden" id="btn-back" onclick="goBack()">← Atrás</button>
+        <button class="btn-next" id="btn-next" onclick="goNext()" disabled>Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-wrap hidden" id="result-wrap">
+      <div id="result-inner"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Datos extraídos de <a href="https://www.godaddy.com/es/seguridad-web/certificado-ssl" target="_blank">godaddy.com/es/seguridad-web/certificado-ssl</a>
+      · Precios en USD · Primer plazo de 3 años
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      num: "PREGUNTA 01 / 04",
+      text: "¿Cuántos sitios o dominios necesitas proteger?",
+      hint: "Esto determina si necesitas un certificado individual, comodín o multi-dominio.",
+      options: [
+        { id: "one",        title: "Un solo dominio",                    desc: "Protejo únicamente www.midominio.com o midominio.com" },
+        { id: "subdomains", title: "Un dominio + subdominios ilimitados", desc: "Ej: tienda.miweb.com, blog.miweb.com, app.miweb.com…" },
+        { id: "multi",      title: "Varios dominios distintos",          desc: "Ej: miweb.com, miweb.net, otrodominio.com" }
+      ]
+    },
+    {
+      num: "PREGUNTA 02 / 04",
+      text: "¿Qué tipo de sitio web tienes?",
+      hint: "El tipo de sitio determina el nivel de validación y confianza necesario.",
+      options: [
+        { id: "blog",       title: "Blog o sitio personal / informativo", desc: "Contenido, portafolio, artículos. Sin transacciones de dinero." },
+        { id: "business",   title: "Sitio de empresa o negocio",          desc: "Página corporativa, servicios profesionales, formulario de contacto." },
+        { id: "ecommerce",  title: "Tienda online o e-commerce",          desc: "Ventas, pagos en línea, datos sensibles de clientes." }
+      ]
+    },
+    {
+      num: "PREGUNTA 03 / 04",
+      text: "¿Quieres que GoDaddy gestione todo por ti?",
+      hint: "El SSL Administrado incluye instalación, mantenimiento y renovación automática cada 90 días — sin intervención técnica de tu parte.",
+      options: [
+        { id: "managed", title: "Sí, que GoDaddy lo instale y mantenga", desc: "Instalación en menos de 1 hora + renovación automática cada 90 días." },
+        { id: "self",    title: "No, yo lo gestiono",                     desc: "Tengo experiencia técnica y prefiero el control total del proceso." }
+      ]
+    },
+    {
+      num: "PREGUNTA 04 / 04",
+      text: "¿Necesitas validación oficial de tu empresa?",
+      hint: "La validación OV o EV verifica legalmente la existencia de tu organización ante los visitantes. Genera mayor confianza, pero tiene un proceso de verificación más largo.",
+      options: [
+        { id: "no_validation", title: "No, solo necesito cifrado básico",     desc: "Validación de Dominio (DV) — rápida, automática y económica." },
+        { id: "ov",            title: "Sí, validación de organización (OV)",   desc: "GoDaddy verifica que mi empresa existe. Para negocios establecidos." },
+        { id: "ev",            title: "Máxima validación extendida (EV)",      desc: "El nivel más riguroso. Ideal para banca, seguros y grandes e-commerce." }
+      ]
+    }
+  ];
+
+  const certs = {
+    dv_single: {
+      name: "SSL DV · Dominio Individual",
+      price: "$5.99", period: "/mes",
+      priceNote: "Primer plazo de 3 años · Autoinstalación",
+      tag: "Validación de Dominio · 1 sitio · DV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl",
+      ideal: "Blogs · Portafolios · Sitios informativos",
+      why: "La opción más económica y rápida. Perfecta para sitios personales, blogs y páginas informativas que necesitan cifrado HTTPS básico sin complejidades técnicas.",
+      features: [
+        { text: "Validación de Dominio (DV)",         sub: "Lista en ~5 minutos · Verificación automática" },
+        { text: "Cifrado SHA-2 de 2048 bits",         sub: "Estándar de la industria" },
+        { text: "Actualización de cifrado anual",     sub: "" },
+        { text: "HTTPS y candado en el navegador",    sub: "Elimina la advertencia 'No seguro'" },
+        { text: "Sello de confianza básico",          sub: "Visible en tu sitio para tus visitantes" },
+        { text: "Mejor posicionamiento en Google",    sub: "Google favorece sitios HTTPS en resultados" },
+        { text: "Garantía de devolución 30 días",     sub: "" }
+      ]
+    },
+    dv_managed: {
+      name: "SSL DV · Administrado",
+      price: "$9.99", period: "/mes",
+      priceNote: "Primer plazo de 3 años · GoDaddy lo instala",
+      tag: "Validación de Dominio · Gestionado · DV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl",
+      ideal: "Negocios pequeños · Sin equipo técnico",
+      why: "La opción sin fricción. GoDaddy se encarga de todo: instalación, renovación cada 90 días y resolución de problemas. Ideal si no tienes tiempo ni conocimientos técnicos.",
+      features: [
+        { text: "Instalación por GoDaddy en <1 hora",  sub: "Sin intervención técnica de tu parte" },
+        { text: "5 renovaciones de cifrado al año",    sub: "Cada 90 días · Supera el estándar de la industria" },
+        { text: "Monitorización y mantenimiento continuo", sub: "Resolución proactiva de incidencias" },
+        { text: "Sello de confianza avanzado",         sub: "Con animación 3D personalizable" },
+        { text: "Validación completamente administrada", sub: "" },
+        { text: "Compatible con cPanel y servidores con panel", sub: "" },
+        { text: "Garantía de devolución 30 días",      sub: "" }
+      ]
+    },
+    wildcard: {
+      name: "SSL DV · Comodín (Wildcard)",
+      price: "$28.99", period: "/mes",
+      priceNote: "Primer plazo de 3 años · Subdominios ilimitados",
+      tag: "Validación de Dominio · *.tudominio.com · DV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl-wildcard",
+      ideal: "Apps · Subdominios de staging/producción",
+      why: "Un solo certificado que cubre automáticamente todos los subdominios actuales y futuros de tu dominio. Ahorra dinero y simplifica la gestión frente a múltiples certificados.",
+      features: [
+        { text: "Cubre 1 dominio + subdominios ilimitados", sub: "Ej: *.tudominio.com → tienda, blog, app…" },
+        { text: "Un certificado para toda la infraestructura", sub: "Gestión centralizada y simplificada" },
+        { text: "Validación de Dominio (DV)",              sub: "" },
+        { text: "Cifrado SHA-2 de 2048 bits",              sub: "" },
+        { text: "Sello de confianza básico",               sub: "" },
+        { text: "Compatible con cPanel, WordPress, VPS",   sub: "" },
+        { text: "Garantía de devolución 30 días",          sub: "" }
+      ]
+    },
+    san: {
+      name: "SSL SAN · Multidominio",
+      price: "$17.99", period: "/mes",
+      priceNote: "Primer plazo de 3 años · 5 dominios incluidos",
+      tag: "Validación de Dominio · Hasta 100 dominios · DV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl-san-multi-dominios",
+      ideal: "Agencias · Multi-marca · Varios proyectos",
+      why: "Gestiona la seguridad de múltiples dominios completamente distintos desde un único certificado. La solución más eficiente cuando administras varios sitios con nombres de dominio diferentes.",
+      features: [
+        { text: "Protege 5 dominios por defecto",          sub: "Planes ampliables hasta 100 dominios en el carrito" },
+        { text: "Dominios completamente distintos",        sub: "Ej: miweb.com, otronegocio.net, empresa.org" },
+        { text: "Panel de control unificado",              sub: "Gestión centralizada de todos los dominios" },
+        { text: "Compatible con Microsoft Exchange e IIS", sub: "" },
+        { text: "Validación de Dominio (DV)",              sub: "" },
+        { text: "Cifrado SHA-2 de 2048 bits",              sub: "" },
+        { text: "Garantía de devolución 30 días",          sub: "" }
+      ]
+    },
+    ov: {
+      name: "SSL OV · Validación de Organización",
+      price: "$11.34", period: "/mes",
+      priceNote: "Plan 3 años con 20% descuento · Empresa verificada",
+      tag: "Validación de Organización · Empresa verificada · OV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl-ov",
+      ideal: "Empresas · Portales corporativos · B2B",
+      why: "Para negocios que quieren demostrar a sus clientes que son una empresa real y verificada. GoDaddy confirma la existencia legal, dirección física y propiedad del dominio — mucho más difícil de obtener fraudulentamente.",
+      features: [
+        { text: "Validación de Organización (OV)",         sub: "Verifica existencia legal de tu empresa" },
+        { text: "Verificación de dirección física y nombre legal", sub: "Proceso de 3–5 días hábiles" },
+        { text: "Sello de confianza avanzado",             sub: "Confirma legitimidad empresarial a visitantes" },
+        { text: "Compatible con Intel vPro",               sub: "Para administración remota de equipos" },
+        { text: "Cumple PCI-DSS, HIPAA, GDPR",            sub: "Estándares regulatorios internacionales" },
+        { text: "Cifrado SHA-2 de 2048 bits",              sub: "" },
+        { text: "Garantía de devolución 30 días",          sub: "" }
+      ]
+    },
+    ev: {
+      name: "SSL EV · Validación Extendida",
+      price: "Consultar", period: "",
+      priceNote: "Proceso de verificación ~30 días · Máxima confianza",
+      tag: "Validación Extendida · Máximo nivel · EV",
+      url: "https://www.godaddy.com/es/seguridad-web/certificado-ssl-ev",
+      ideal: "Banca · Seguros · E-commerce de alto volumen",
+      why: "El certificado SSL con mayor nivel de seguridad y credibilidad del mercado. Requiere una verificación exhaustiva de documentos legales, identidad y registro de la empresa. Recomendado para cualquier sitio que procese pagos o datos sensibles a gran escala.",
+      features: [
+        { text: "Validación Extendida (EV) — nivel máximo",  sub: "Proceso exhaustivo de documentos empresariales" },
+        { text: "Verifica identidad, estado legal y domicilio", sub: "Comprobación en bases de datos externas" },
+        { text: "DV gratuito durante el proceso de verificación", sub: "Tu sitio sigue seguro mientras esperas" },
+        { text: "Sello de confianza avanzado",                sub: "Máxima credibilidad de marca ante usuarios" },
+        { text: "Cumple PCI-DSS, HIPAA, HITECH, GDPR",       sub: "" },
+        { text: "Mejor conversión y reducción de tasa de rebote", sub: "" },
+        { text: "Garantía de devolución 30 días",             sub: "" }
+      ]
+    }
+  };
+
+  let answers = [];
+  let current = 0;
+  let selected = null;
+
+  function recommend() {
+    const [sites, , managed, validation] = answers;
+    if (sites === "subdomains") return "wildcard";
+    if (sites === "multi")      return "san";
+    if (validation === "ev")    return "ev";
+    if (validation === "ov")    return "ov";
+    if (managed === "managed")  return "dv_managed";
+    return "dv_single";
+  }
+
+  function renderQuestion() {
+    const q = questions[current];
+    document.getElementById("q-num").textContent  = q.num;
+    document.getElementById("q-text").textContent = q.text;
+    document.getElementById("q-hint").textContent = q.hint;
+
+    const grid = document.getElementById("q-options");
+    grid.innerHTML = "";
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "opt-btn" + (selected === opt.id ? " selected" : "");
+      btn.innerHTML = `
+        <div class="opt-radio"></div>
+        <div class="opt-body">
+          <div class="opt-title">${opt.title}</div>
+          <div class="opt-desc">${opt.desc}</div>
+        </div>`;
+      btn.onclick = () => selectOpt(opt.id);
+      grid.appendChild(btn);
+    });
+
+    const backBtn = document.getElementById("btn-back");
+    backBtn.classList.toggle("hidden", current === 0);
+    document.getElementById("btn-next").disabled = !selected;
+    document.getElementById("btn-next").textContent =
+      current < questions.length - 1 ? "Siguiente →" : "Ver mi recomendación →";
+
+    updateProgress();
+  }
+
+  function selectOpt(id) {
+    selected = id;
+    renderQuestion();
+  }
+
+  function updateProgress() {
+    for (let i = 1; i <= 4; i++) {
+      const step  = document.getElementById("dot-"  + i);
+      const dot   = document.getElementById("pdot-" + i);
+      const isDone   = i - 1 < current;
+      const isActive = i - 1 === current;
+      step.className = "p-step" + (isActive ? " active" : isDone ? " done" : "");
+      dot.textContent = isDone ? "✓" : String(i);
+      if (i < 4) {
+        document.getElementById("line-" + i).className = "p-line" + (isDone ? " done" : "");
+      }
+    }
+  }
+
+  function goNext() {
+    if (!selected) return;
+    answers[current] = selected;
+    if (current < questions.length - 1) {
+      current++;
+      selected = answers[current] || null;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function goBack() {
+    if (current > 0) {
+      current--;
+      selected = answers[current] || null;
+      renderQuestion();
+    }
+  }
+
+  function showResult() {
+    document.getElementById("quiz-wrap").classList.add("hidden");
+    document.getElementById("progress-wrap").classList.add("hidden");
+
+    const key  = recommend();
+    const cert = certs[key];
+    const others = Object.entries(certs).filter(([k]) => k !== key);
+
+    const featHtml = cert.features.map(f => `
+      <div class="feat-row">
+        <div class="feat-check">
+          <svg viewBox="0 0 10 10" fill="none">
+            <polyline points="1.5,5.2 4,7.5 8.5,2.5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="feat-body">
+          <div class="feat-text">${f.text}</div>
+          ${f.sub ? `<div class="feat-sub">${f.sub}</div>` : ""}
+        </div>
+      </div>`).join("");
+
+    const cmpHtml = others.map(([, c]) => `
+      <div class="cmp-card">
+        <div class="cmp-name">${c.name}</div>
+        <div class="cmp-price">${c.price}<span>${c.period}</span></div>
+        <div class="cmp-ideal">${c.ideal}</div>
+      </div>`).join("");
+
+    document.getElementById("result-inner").innerHTML = `
+      <div class="rec-tag">Recomendación personalizada</div>
+
+      <div class="result-main">
+        <div class="result-glow"></div>
+        <div class="result-name">${cert.name}</div>
+        <div class="result-tag">${cert.tag}</div>
+
+        <div class="price-row">
+          <span class="price-amount">${cert.price}</span>
+          <span class="price-period">${cert.period}</span>
+        </div>
+        <div class="price-note">${cert.priceNote}</div>
+
+        <div class="why-box">
+          <div class="why-label">¿POR QUÉ ESTE CERTIFICADO?</div>
+          <div class="why-text">${cert.why}</div>
+        </div>
+
+        <div class="features">
+          <div class="features-label">INCLUYE</div>
+          ${featHtml}
+        </div>
+
+        <div class="cta-row">
+          <a class="btn-cta" href="${cert.url}" target="_blank">Ver plan en GoDaddy →</a>
+          <button class="btn-restart" onclick="restart()">← Nueva búsqueda</button>
+        </div>
+      </div>
+
+      <div class="compare-section">
+        <div class="compare-title">OTRAS OPCIONES DISPONIBLES</div>
+        <div class="compare-grid">${cmpHtml}</div>
+      </div>`;
+
+    document.getElementById("result-wrap").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function restart() {
+    answers  = [];
+    current  = 0;
+    selected = null;
+    document.getElementById("result-inner").innerHTML = "";
+    document.getElementById("result-wrap").classList.add("hidden");
+    document.getElementById("progress-wrap").classList.remove("hidden");
+    document.getElementById("quiz-wrap").classList.remove("hidden");
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  renderQuestion();
+</script>
+</body>
+</html>
